@@ -57,7 +57,12 @@ public class PedidoService {
 
         // Salva o Pedido e os Itens associados
         Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
-        List<ProdutoPedido> produtoPedidos = pedidoSalvo.getItens().stream().map(itemPedido -> {
+
+        return convertPedido(pedidoSalvo);
+    }
+
+    private PedidoResponse convertPedido(Pedido pedido){
+        List<ProdutoPedido> produtoPedidos = pedido.getItens().stream().map(itemPedido -> {
             Produto produto = itemPedido.getProduto();
             return new ProdutoPedido(
                     produto.getId(),
@@ -70,10 +75,10 @@ public class PedidoService {
 
         // Cria o PedidoResponse
         PedidoResponse pedidoResponse = new PedidoResponse(
-                pedidoSalvo.getId(),
-                pedidoSalvo.getDataPedido(),
+                pedido.getId(),
+                pedido.getDataPedido(),
                 produtoPedidos,
-                pedidoSalvo.getStatus()
+                pedido.getStatus()
         );
 
         return pedidoResponse;
@@ -82,27 +87,19 @@ public class PedidoService {
 
     public List<PedidoResponse> findAll() {
         return pedidoRepository.findAll().stream()
-                .map(PedidoMapper.INSTANCE::toDto)
+                .map(e->convertPedido(e))
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
-//    public PedidoResponse update(Integer id, PedidoUpdate pedidoUpdate) {
-//        Pedido pedido = pedidoRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-//        return PedidoMapper.INSTANCE.toDto(pedidoRepository.save(PedidoMapper.INSTANCE.toUpdateEntity(pedidoUpdate)));
-//    }
 
     public PedidoResponse findById(Integer id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-        return PedidoMapper.INSTANCE.toDto(pedido);
+        return convertPedido(pedido);
     }
 
     @Transactional
     public PedidoResponse updateStatus(Integer id, PedidoStatusUpdate statusUpdate) {
-//        Pedido pedido = pedidoRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
 
         Pedido pedido = pedidoRepository.porIdComItens(id);
 
@@ -112,7 +109,7 @@ public class PedidoService {
 
         pedido.setStatus(statusUpdate.status());
         pedidoRepository.atualizaStatus(statusUpdate.status(), pedido);
-        return PedidoMapper.INSTANCE.toDto(pedidoRepository.save(pedido));
+        return convertPedido(pedidoRepository.save(pedido));
     }
 
     public void aprovaPagamentoPedido(Integer id) {
