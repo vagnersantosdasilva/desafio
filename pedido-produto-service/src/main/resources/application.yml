@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: pedido-produto-service
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  flyway:
+    defaultSchema: loja_online
+    baselineOnMigrate: true
+    table: flyway_schema_history_pedidos_produto
+server:
+  port: 8081
+
+

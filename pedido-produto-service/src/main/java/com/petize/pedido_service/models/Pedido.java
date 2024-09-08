@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="pedidos")
+@Table(name="pedido")
 @Data
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "data_pedido", nullable = false)
     private LocalDateTime dataPedido;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Produto> itens = new ArrayList<>();
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @Column(name = "status", length = 50, nullable = false)
     @Enumerated(EnumType.STRING)
