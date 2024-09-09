@@ -24,6 +24,7 @@ public class PagamentoController {
 
     @PostMapping("/pagamento")
     public ResponseEntity<PagamentoDTO> create(@RequestBody  PagamentoDTO dto, UriComponentsBuilder uriBuilder) {
+        //Recebe requisição com status de pagamento e coloca na fila do RabbitMQ
         //PagamentoDTO pagamento = service.criarPagamento(dto);
         URI endereco = uriBuilder.path("/pagamentos/{id}").buildAndExpand(1).toUri();
         Message message = new Message(("Criei um pagamento para  o pedido de id " + dto.pedidoId()).getBytes());
