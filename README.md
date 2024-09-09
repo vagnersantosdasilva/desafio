@@ -49,3 +49,9 @@ http://localhost:3311
 
 ### Documentação Open API pagamento-service
 `http://localhost:8082/swagger-ui/index.html#/`
+
+### Implantação em ambiente AWS usando IAC
+```
+cd aws-iac-microsservicos
+cdk deploy
+```
