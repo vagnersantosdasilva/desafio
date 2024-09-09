@@ -1,47 +1,73 @@
-version: '3.8' # Certifique-se de que sua versão do Docker Compose suporta '3.8'
+version: '3.8'
 networks:
   app_network:
     driver: bridge
 
 services:
+  # RabbitMQ (compartilhado entre os microsserviços)
   rabbitmq:
     image: rabbitmq:3.13-management
     restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     networks:
       - app_network
 
+  # Banco de dados MySQL (para o pedido-produto-service)
   db:
     image: mysql:8.0
     restart: always
     volumes:
-      - './.db:/var/lib/mysql'
+      - './pedido-produto-service/.db:/var/lib/mysql'
     environment:
       - MYSQL_DATABASE=loja_online
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - app_network
-  app:
+
+  # Microsserviço de Pedido-Produto
+  pedido-produto-service:
     image: amazoncorretto:17-alpine-jdk
     working_dir: /app
     command: ./mvnw spring-boot:run
     ports:
       - 8081:8081
     volumes:
-      - '.:/app'
+      - './pedido-produto-service:/app'
     environment:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_NAME=loja_online
       - DB_USER=root
       - DB_PASS=root
+      - RABBITMQ_HOST=rabbitmq
     depends_on:
       - db
       - rabbitmq
     networks:
       - app_network
+
+  # Microsserviço de Pagamento
+  pagamento-service:
+    image: amazoncorretto:17-alpine-jdk
+    working_dir: /app2
+    command: ./mvnw spring-boot:run
+    ports:
+      - 8082:8082
+    volumes:
+      - './pagamento-service:/app2'
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    networks:
+      - app_network
+
+  # Adminer para acessar o banco de dados
   adminer:
     image: adminer:4
     restart: always

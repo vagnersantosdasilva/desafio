@@ -33,6 +33,16 @@ Este projeto implementa uma loja online simplificada como desafio técnico para 
    ```
 ## Instalação
 2.**Baixe e execute as imagens**
-    ```bash
-    docker-compose up -d
-    ```
+```bash
+    docker-compose up
+```
+## Visualizar RabbitMQ
+3.**Para visualizar as filas e mensagens enviadas**
+```bash
+http://localhost:15672
+```
+## Visualizar MySQL
+4.**Para visualizar as tabelas geradas no MySQL, use login e senha (root) e base de dados (loja_online)**
+```bash
+http://localhost:3311
+```

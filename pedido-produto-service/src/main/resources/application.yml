@@ -17,7 +17,7 @@ spring:
     table: flyway_schema_history_pedidos_produto
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest

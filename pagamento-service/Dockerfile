@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=builder /app/target/pagamento-service.jar app.jar
 
 # Expor a porta (ajuste de acordo com a sua aplicação)
-EXPOSE 8081
+EXPOSE 8082
 
 # Comando para iniciar a aplicação
 CMD ["java", "-jar", "app.jar"]
