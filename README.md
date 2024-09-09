@@ -20,17 +20,14 @@ Este projeto implementa uma loja online simplificada como desafio técnico para 
 * Java 17
 * Git
 
-## Instalação
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/vagnersantosdasilva/desafio.git](https://github.com/vagnersantosdasilva/desafio.git)
-   cd desafio
-
 ## Clonagem do repositório
-1.**Clone o repositório:**
-   ```bash
-   git@github.com:vagnersantosdasilva/desafio.git
-   ```
+1. **Clone o repositório:**
+
+```bash
+   git clone https://github.com/vagnersantosdasilva/desafio.git
+   cd desafio
+```
+
 ## Instalação
 2.**Baixe e execute as imagens**
 ```bash
@@ -46,3 +43,9 @@ http://localhost:15672
 ```bash
 http://localhost:3311
 ```
+
+### Documentação Open API pedido-produto-service
+`http://localhost:8081/swagger-ui/index.html#/`
+
+### Documentação Open API pagamento-service
+`http://localhost:8082/swagger-ui/index.html#/`
