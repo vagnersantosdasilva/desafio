@@ -1,0 +1,45 @@
+version: '3.8' # Certifique-se de que sua versão do Docker Compose suporta '3.8'
+networks:
+  db:
+    driver: bridge
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - './.db:/var/lib/mysql'
+    environment:
+      - MYSQL_DATABASE=app
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - db
+  app:
+    image: amazoncorretto:17-alpine-jdk
+    working_dir: /app
+    command: ./mvnw spring-boot:run
+    ports:
+      - 8080:8080
+    volumes:
+      - '.:/app'
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=app
+      - DB_USER=root
+      - DB_PASS=root
+    depends_on:
+      - db
+    networks:
+      - db
+  adminer:
+    image: adminer:4
+    restart: always
+    ports:
+      - 3308:8080
+    environment:
+      - ADMINER_DEFAULT=mysql
+      - ADMINER_DESIGN=dracula
+    depends_on:
+      - db
+    networks:
+      - db
